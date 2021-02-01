@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/endpoints"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/aws/signer/v4"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -89,10 +89,9 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 	proxyURL := *req.URL
 	if p.HostOverride != "" {
 		proxyURL.Host = p.HostOverride
-
 	} else {
-		if grafanaHost := req.Header.Get("grafana-host"); grafanaHost != "" {
-			proxyURL.Host = grafanaHost
+		if hostOverride := req.Header.Get("host-override"); hostOverride != "" {
+			proxyURL.Host = hostOverride
 		} else {
 			proxyURL.Host = req.Host
 		}
